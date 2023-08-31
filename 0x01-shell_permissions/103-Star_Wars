@@ -1,2 +1,2 @@
 #!/bin/bash
-mpv video_filename.mp4
+telnet towel.blinkenlights.nl
