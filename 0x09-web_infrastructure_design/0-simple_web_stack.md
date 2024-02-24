@@ -1,6 +1,7 @@
 Simple Web Stack
 
-![0-simple_web_stack](https://github.com/Zahra11Mosbal11/alx-system_engineering-devops/assets/107762291/708e2b9c-bd8f-4b11-be29-cacef177fe5e)
+
+![Untitled-2](https://github.com/Zahra11Mosbal11/alx-system_engineering-devops/assets/107762291/85ee7b8f-7acb-4e06-a157-67528e600355)
 
 Description
 
