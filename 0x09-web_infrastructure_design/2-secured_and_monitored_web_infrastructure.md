@@ -1,4 +1,5 @@
 Secured and Monitored Web Infrastructure
+![2-secured_and_monitored_web_infrastructure](https://github.com/Zahra11Mosbal11/alx-system_engineering-devops/assets/107762291/70693d37-aba1-4ff4-b896-742f0a74fc80)
 
 
 
