@@ -8,6 +8,7 @@ sudo apt-get update
 sudo apt-get install -y nginx
 service nginx start
 mkdir /etc/nginx/html
+sudo ufw allow 'Nginx HTTP'
 # Test nginx response
 echo "Hello World!" > /etc/nginx/html/index.html
 echo "Ceci n'est pas une page" > /etc/nginx/html/404.html
