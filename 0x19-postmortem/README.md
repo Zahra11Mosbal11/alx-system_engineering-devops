@@ -1,1 +1,14 @@
-0x19-postmortem
+Mock Postmorte
+--------------
+Issue Summary
+From Tuesday May 16, 2023, 10:00 AM to Tuesday, May 16, 2023, 10:30 AM the wordpress page was down after uploading to the web server. 2% of users were affected after this issue. The root cause was a bad configuration in the wp-settings.php.
+Timeline
+On May 16, 2023, 10:00 AM: I updated the web server. At 10:08 AM: I detected the wordpress site was down. At 10:10 AM: I realized that web server error was “500 response”. At 10:12 AM: I started debugging the web server and assumed the problem was a missing file. At 10:15 AM: After checking all files were present in the /var/www/html/ folder, I assumed the problem was when importing the files and used “strace” built-in to debug. At 10:17 AM: I searched the process “of www-data” with “ps auxf” command. At 10:19 AM: I used curl 127.0.0.1 to test the “www-data” process. At 10:25 AM: I realized that it had an error when importing the /var/www/html/wp-includes/class-wp-locale.phpp file in /var/www/html/wp-settings.php file. At 10:28 AM: I opened the file /var/www/html/wp-settings.php and fixed the import name class-wp-locale.phpp to class-wp-locale.php. At 10:30 AM: I tested the web server with curl 127.0.0.1 again and the problem was solved.
+
+Root cause and resolution
+-------------------------
+The problem was I added an extra “p” letter at the end of the “class-wp-locale.php” file, so changed the name to “class-wp-locale.phpp” when he tried to update the wordpress site. Therefore, when the “class-wp-locale.phpp” file was imported in the /var/www/html/wp-settings.php the system failed because the file did not exist. To solve this problem, I checked the running process(ps auxf) and debug the www-data process using strace (strace www-data). There, I read the message “/var/www/html/wp-includes/class-wp-locale.phpp ENOENT (No such file or directory)”. I realized that had an error in the name of that file, I opened the “/var/www/html/wp-settings.php” file, search the “class-wp-locale.phpp” file, delete the extra “p” letter and save the changes.
+
+Corrective and preventative measures
+------------------------------------
+This outage was not a web server error, but an application error. To prevent such outages moving forward, please keep the following in mind. Test the application before deploying. This error would have arisen and could have been addressed earlier had the app been tested. My solution to this was to write a Puppet manifest 0-strace_is_your_friend.pp which automated the fix and can be used to fix identical errors should they occur in the future with a little manipulation where necessary. The manifest replaces any phpp extensions in the file /var/www/html/wp-settings.php with php. It is important to note that though this wasn’t a web server issue. There is a fundamental need to configure one or multiple monitoring tool(s) to your on-call system, they are the ones that will actually detect any anomaly and report it to,an example is datadog.
